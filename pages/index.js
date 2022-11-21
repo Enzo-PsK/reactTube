@@ -1,17 +1,20 @@
 import config from "../config.json";
+import React from "react";
 import styled from "styled-components";
 import { CSSReset } from "../src/components/CssReset";
-import Menu from "../src/components/Menu";
+import Menu from "../src/components/Menu/Menu";
 import { StyledTimeline } from "../src/components/Timeline";
 
 const HomePage = () => {
+    const [filterValue, setFilterValue] = React.useState("");
+
     return (
         <>
             <CSSReset />
             <div>
-                <Menu />
+                <Menu filterValue={filterValue} setFilterValue={setFilterValue} />
                 <Header></Header>
-                <TimeLine playlists={config.playlists} />
+                <TimeLine searchValue={filterValue} playlists={config.playlists} />
             </div>
         </>
     );
@@ -47,7 +50,7 @@ const Header = () => {
         </StyledHeader>
     );
 };
-const TimeLine = (props) => {
+const TimeLine = ({ searchValue, ...props }) => {
     const playlistNames = Object.keys(props.playlists);
     return (
         <StyledTimeline>
@@ -57,14 +60,20 @@ const TimeLine = (props) => {
                     <section key={index}>
                         <h2>{playlistName}</h2>
                         <div>
-                            {videos.map((video, index) => {
-                                return (
-                                    <a key={index} href={video.url}>
-                                        <img src={video.thumb} />
-                                        <span>{video.title}</span>
-                                    </a>
-                                );
-                            })}
+                            {videos
+                                .filter((video) => {
+                                    const formattedTitle = video.title.toLowerCase()
+                                    const formattedSearchValue = searchValue.toLowerCase()
+                                    return formattedTitle.includes(formattedSearchValue);
+                                })
+                                .map((video, index) => {
+                                    return (
+                                        <a key={index} href={video.url}>
+                                            <img src={video.thumb} />
+                                            <span>{video.title}</span>
+                                        </a>
+                                    );
+                                })}
                         </div>
                     </section>
                 );
