@@ -1,16 +1,14 @@
 import config from "../config.json";
 import React from "react";
 import styled from "styled-components";
-import { CSSReset } from "../src/components/CssReset";
 import Menu from "../src/components/Menu/Menu";
 import { StyledTimeline } from "../src/components/Timeline";
 
 const HomePage = () => {
-    const [filterValue, setFilterValue] = React.useState("");
+    const [filterValue, setFilterValue] = React.useState(" ");
 
     return (
         <>
-            <CSSReset />
             <div>
                 <Menu filterValue={filterValue} setFilterValue={setFilterValue} />
                 <Header></Header>
@@ -22,7 +20,7 @@ const HomePage = () => {
 export default HomePage;
 
 const StyledHeader = styled.div`
-    margin-top: 60px;
+    background-color: ${({ theme }) => theme.backgroundLevel1 || "#FFFFFF"};
     img {
         width: 80px;
         height: 80px;
@@ -36,10 +34,17 @@ const StyledHeader = styled.div`
         gap: 10px;
     }
 `;
+
+const StyledBanner = styled.div`
+    margin-top: 60px;
+    background-image: url(${({ bg }) => bg});
+    height: 200px;
+`;
+
 const Header = () => {
     return (
         <StyledHeader>
-            {/* <img src="Banner" /> */}
+            <StyledBanner bg={config.bannerBg} />
             <section className="user-info">
                 <img src={`https://github.com/${config.github}.png`} />
                 <div>
@@ -62,8 +67,8 @@ const TimeLine = ({ searchValue, ...props }) => {
                         <div>
                             {videos
                                 .filter((video) => {
-                                    const formattedTitle = video.title.toLowerCase()
-                                    const formattedSearchValue = searchValue.toLowerCase()
+                                    const formattedTitle = video.title.toLowerCase();
+                                    const formattedSearchValue = searchValue.toLowerCase();
                                     return formattedTitle.includes(formattedSearchValue);
                                 })
                                 .map((video, index) => {

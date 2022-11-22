@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import DarkModeSwitch from "./components/DarkModeSwitch";
 import Search from "./components/Search";
 
 const StyledMenu = styled.header`
@@ -18,8 +19,9 @@ const StyledMenu = styled.header`
         gap: 10px;
         align-items: center;
     }
-    span {
+    .header-title {
         font-size: 20px;
+        color: ${({ theme }) => theme.textColorBase || "black"};
     }
     .logo {
         width: 100%;
@@ -34,13 +36,14 @@ const StyledMenu = styled.header`
     }
 `;
 
-export default function Menu({filterValue, setFilterValue}) {
+export default function Menu({ filterValue, setFilterValue }) {
     return (
         <StyledMenu>
             <div>
                 <Logo />
-                <span>ReactTube</span>
+                <span className="header-title">ReactTube</span>
                 <Search filterValue={filterValue} setFilterValue={setFilterValue} />
+                <DarkModeSwitch />
             </div>
         </StyledMenu>
     );
